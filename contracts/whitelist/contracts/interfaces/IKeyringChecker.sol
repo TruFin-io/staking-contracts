@@ -11,7 +11,5 @@ interface IKeyringChecker {
      * @param entity_ The address of the entity to check.
      * @return True if the entity has a valid credential, false otherwise.
      */
-    function checkCredential(address entity_, uint32 policyId) external view returns (bool) {
-        return checkCredential(policyId, entity_);
-    }
+    function checkCredential(address entity_, uint32 policyId) external view returns (bool);
 }
