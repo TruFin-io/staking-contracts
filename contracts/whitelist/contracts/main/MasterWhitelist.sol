@@ -131,9 +131,6 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     /// @param _keyringChecker The address of the keyring checker.
     /// @param _keyringPolicyId The policy id of the keyring.
     function setKeyringConfiguration(address _keyringChecker, uint32 _keyringPolicyId) public onlyAgent {
-        if (address(keyringChecker) != address(0) || keyringPolicyId != 0) {
-            revert KeyringConfigurationAlreadySet(address(keyringChecker), keyringPolicyId);
-        }
         if (address(_keyringChecker) == address(0) || _keyringPolicyId == 0) {
             revert InvalidKeyringConfiguration(address(_keyringChecker), _keyringPolicyId);
         }

@@ -13,7 +13,7 @@ async function main() {
     throw new Error("KEYRING_POLICY_ID environment variable is not set");
   }
   const keyringCheckerAddress = process.env.KEYRING_CHECKER;
-  const keyringPolicyId = BigNumber.from(process.env.KEYRING_POLICY_ID);
+  const keyringPolicyId = ethers.BigNumber.from(process.env.KEYRING_POLICY_ID);
 
   console.log(`Chain ID: ${chainID}`);
   console.log(`Keyring Checker Address: ${keyringCheckerAddress}`);

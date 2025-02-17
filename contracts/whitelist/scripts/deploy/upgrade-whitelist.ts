@@ -19,23 +19,20 @@ async function main() {
 
   // Load the contract proxy and await deployment.
   const contractFactory = await ethers.getContractFactory(contractName);
-   const contractFactory = await ethers.getContractFactory(contractName);
-   console.log("Upgrading contract...");
-   let contract = await upgrades.upgradeProxy(contractAddress, contractFactory, {});
-   console.log("Waiting for upgrade transaction...");
-   await contract.deployed();
-
-   // Non atomic operation as initializer cannot be called on an already initialized contract.
-   console.log("Setting keyring configuration...");
-   const tx = await contract.setKeyringConfiguration(keyringCheckerAddress, keyringPolicyId);
-   console.log("Waiting for configuration transaction...");
-   const receipt = await tx.wait();
-   
-   if (!receipt.status) {
-     throw new Error("Failed to set keyring configuration");
-   }
-
+  console.log("Upgrading contract...");
+  let contract = await upgrades.upgradeProxy(contractAddress, contractFactory, {});
+  console.log("Waiting for upgrade transaction...");
   await contract.deployed();
+
+  // Non atomic operation as initializer cannot be called on an already initialized contract.
+  console.log("Setting keyring configuration...");
+  const tx = await contract.setKeyringConfiguration(keyringCheckerAddress, keyringPolicyId);
+  console.log("Waiting for configuration transaction...");
+  const receipt = await tx.wait();
+
+  if (!receipt.status) {
+    throw new Error("Failed to set keyring configuration");
+  }
 
   // Log the deployed address and verification instructions.
   console.log(`${contractName} deployed at ${contract.address}`);
