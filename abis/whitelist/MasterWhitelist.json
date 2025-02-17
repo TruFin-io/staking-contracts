@@ -36,22 +36,6 @@
     "type": "error"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_keyringChecker",
-        "type": "address"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_keyringPolicyId",
-        "type": "uint32"
-      }
-    ],
-    "name": "KeyringConfigurationAlreadySet",
-    "type": "error"
-  },
-  {
     "inputs": [],
     "name": "UserAlreadyAnAgent",
     "type": "error"

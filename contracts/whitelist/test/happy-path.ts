@@ -5,6 +5,7 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 describe("HAPPY PATH", () => {
   let whitelist: Contract;
+  let keyringChecker: Contract;
   let owner;
   let agent;
   let user;
@@ -21,7 +22,7 @@ describe("HAPPY PATH", () => {
 
     // Deploy a mocked keyring checker for testing purposes
     const keyringCheckerFactory = await ethers.getContractFactory("MockedKeyringChecker");
-    const keyringChecker = await keyringCheckerFactory.deploy();
+    keyringChecker = await keyringCheckerFactory.deploy();
     const keyringPolicyId = 1; // Just a random policy id non-zero
 
     // Deploy the whitelist contract
@@ -202,5 +203,16 @@ describe("HAPPY PATH", () => {
     await expect(await whitelist.connect(agent).whitelistUser(user.address))
       .to.emit(whitelist, "WhitelistingStatusChanged")
       .withArgs(user.address, WhitelistingStatus.Blacklisted, WhitelistingStatus.Whitelisted);
+  });
+
+  it("should allow a user to be whitelisted if they have a Keyring credential while not being explicitly whitelisted", async function () {
+    // expect non whitelisted user to be refused
+    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(false);
+
+    // set allow to true
+    await keyringChecker.setAllow(true);
+
+    // expect user to be whitelisted
+    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(true);
   });
 });
