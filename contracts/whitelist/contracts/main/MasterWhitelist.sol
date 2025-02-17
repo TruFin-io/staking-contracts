@@ -52,20 +52,6 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
         setKeyringConfiguration(_keyringChecker, _keyringPolicyId);
     }
 
-    /// @notice Sets the keyring configuration.
-    /// @param _keyringChecker The address of the keyring checker.
-    /// @param _keyringPolicyId The policy id of the keyring.
-    function setKeyringConfiguration(address _keyringChecker, uint32 _keyringPolicyId) public onlyAgent {
-        if (address(keyringChecker) != address(0) || keyringPolicyId != 0) {
-            revert KeyringConfigurationAlreadySet(address(keyringChecker), keyringPolicyId);
-        }
-        if (address(_keyringChecker) == address(0) || _keyringPolicyId == 0) {
-            revert InvalidKeyringConfiguration(address(_keyringChecker), _keyringPolicyId);
-        }
-        keyringChecker = IKeyringChecker(_keyringChecker);
-        keyringPolicyId = _keyringPolicyId;
-    }
-
     /// @notice Adds an agent to the list of agents.
     /// @param _agent The address of the agent.
     function addAgent(address _agent) external onlyAgent {
@@ -139,6 +125,20 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     /// @return A value indicating whether this user is whitelisted.
     function isUserWhitelisted(address _user) external view returns (bool) {
         return users[_user] == WhitelistingStatus.Whitelisted || keyringChecker.checkCredential(keyringPolicyId, _user);
+    }
+
+    /// @notice Sets the keyring configuration.
+    /// @param _keyringChecker The address of the keyring checker.
+    /// @param _keyringPolicyId The policy id of the keyring.
+    function setKeyringConfiguration(address _keyringChecker, uint32 _keyringPolicyId) public onlyAgent {
+        if (address(keyringChecker) != address(0) || keyringPolicyId != 0) {
+            revert KeyringConfigurationAlreadySet(address(keyringChecker), keyringPolicyId);
+        }
+        if (address(_keyringChecker) == address(0) || _keyringPolicyId == 0) {
+            revert InvalidKeyringConfiguration(address(_keyringChecker), _keyringPolicyId);
+        }
+        keyringChecker = IKeyringChecker(_keyringChecker);
+        keyringPolicyId = _keyringPolicyId;
     }
 
     /// @notice Checks if a user is blacklisted.
