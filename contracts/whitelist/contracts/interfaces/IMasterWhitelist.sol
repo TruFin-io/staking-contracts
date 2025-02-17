@@ -58,6 +58,16 @@ interface IMasterWhitelist {
     /// @notice Error thrown when trying to clear a user status.
     error WhitelistingStatusAlreadyCleared();
 
+    /// @notice Error thrown when trying to set the keyring configuration.
+    /// @param _keyringChecker The address of the keyring checker.
+    /// @param _keyringPolicyId The policy id of the keyring.
+    error KeyringConfigurationAlreadySet(address _keyringChecker, uint32 _keyringPolicyId);
+
+    /// @notice Error thrown when trying to set an invalid keyring configuration.
+    /// @param _keyringChecker The address of the keyring checker.
+    /// @param _keyringPolicyId The policy id of the keyring.
+    error InvalidKeyringConfiguration(address _keyringChecker, uint32 _keyringPolicyId);
+
     // --- Functions ---
 
     /// @notice Checks if a user is in the whitelist.

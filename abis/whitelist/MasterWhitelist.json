@@ -20,6 +20,38 @@
     "type": "error"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_keyringChecker",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_keyringPolicyId",
+        "type": "uint32"
+      }
+    ],
+    "name": "InvalidKeyringConfiguration",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_keyringChecker",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_keyringPolicyId",
+        "type": "uint32"
+      }
+    ],
+    "name": "KeyringConfigurationAlreadySet",
+    "type": "error"
+  },
+  {
     "inputs": [],
     "name": "UserAlreadyAnAgent",
     "type": "error"
@@ -186,7 +218,18 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_keyringChecker",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_keyringPolicyId",
+        "type": "uint32"
+      }
+    ],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -251,6 +294,32 @@
   },
   {
     "inputs": [],
+    "name": "keyringChecker",
+    "outputs": [
+      {
+        "internalType": "contract IKeyringChecker",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "keyringPolicyId",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -278,6 +347,24 @@
   {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_keyringChecker",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_keyringPolicyId",
+        "type": "uint32"
+      }
+    ],
+    "name": "setKeyringConfiguration",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

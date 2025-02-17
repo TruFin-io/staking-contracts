@@ -5,6 +5,7 @@ pragma solidity =0.8.19;
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {IMasterWhitelist} from "../interfaces/IMasterWhitelist.sol";
 import {IKeyringChecker} from "../interfaces/IKeyringChecker.sol";
+
 /// @title Master Whitelist
 /// @notice Contract that manages a whitelist of users.
 contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
@@ -22,7 +23,7 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     /// @notice The policyId to use with the Keyring contract.
     /// @dev This could have been immutable, but not possible in upgradeable contracts.
     /// @dev Consumes one storage slot.
-    uint32 public policyId;
+    uint32 public keyringPolicyId;
 
     /// @notice Gap for upgradeability.
     /// @dev Two storage slots taken by keyringChecker and policyId.
@@ -46,19 +47,23 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     }
 
     /// @notice Initializer for the whitelist.
-    function initialize(address _keyringChecker, uint32 _policyId) external initializer {
+    function initialize(address _keyringChecker, uint32 _keyringPolicyId) external initializer {
         __Ownable_init();
-        keyringChecker = IKeyringChecker(_keyringChecker);
-        policyId = _policyId;
+        setKeyringConfiguration(_keyringChecker, _keyringPolicyId);
     }
 
-    /// @dev Returns true if `account` has permission to hold and transfer tokens.
-    /// @dev By default Morpho and Bundler have this permission.
-    /// @dev Override this function to change the permissioning scheme.
-    function hasPermission(address account) public view virtual returns (bool) {
-        // Keyring is turned on, so perform Keyring checks
-        Keyring k = Keyring(keyringChecker);
-        return k.checkCredential(policyId, account);
+    /// @notice Sets the keyring configuration.
+    /// @param _keyringChecker The address of the keyring checker.
+    /// @param _keyringPolicyId The policy id of the keyring.
+    function setKeyringConfiguration(address _keyringChecker, uint32 _keyringPolicyId) public onlyAgent {
+        if (address(keyringChecker) != address(0) || keyringPolicyId != 0) {
+            revert KeyringConfigurationAlreadySet(address(keyringChecker), keyringPolicyId);
+        }
+        if (address(_keyringChecker) == address(0) || _keyringPolicyId == 0) {
+            revert InvalidKeyringConfiguration(address(_keyringChecker), _keyringPolicyId);
+        }
+        keyringChecker = IKeyringChecker(_keyringChecker);
+        keyringPolicyId = _keyringPolicyId;
     }
 
     /// @notice Adds an agent to the list of agents.
@@ -129,11 +134,11 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
         users[_user] = WhitelistingStatus.None;
     }
 
-    /// @notice Checks if a user is whitelisted.
+    /// @notice Checks if a user is whitelisted or has credentials in Keyring.
     /// @param _user The address to check.
     /// @return A value indicating whether this user is whitelisted.
     function isUserWhitelisted(address _user) external view returns (bool) {
-        return users[_user] == WhitelistingStatus.Whitelisted || hasPermission(_user);
+        return users[_user] == WhitelistingStatus.Whitelisted || keyringChecker.checkCredential(keyringPolicyId, _user);
     }
 
     /// @notice Checks if a user is blacklisted.

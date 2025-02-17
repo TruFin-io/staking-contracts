@@ -2,10 +2,9 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
 import "hardhat-gas-reporter";
-require("dotenv").config({path: '../../.env'});
+require("dotenv").config({ path: "../../.env" });
 require("hardhat-contract-sizer");
-require('hardhat-abi-exporter');
-
+require("hardhat-abi-exporter");
 
 export default {
   mocha: {
@@ -56,10 +55,10 @@ export default {
         //Due to RPC error using Mainnet RPC
         url: process.env.MAINNET_RPC,
         // block before checkpoint submitted
-        blockNumber: 17485579,
+        blockNumber: 17485579
       },
       accounts: {
-        privateKey: [process.env.DEPLOYER_PK],
+        privateKey: [process.env.DEPLOYER_PK]
       }
     }
   },
@@ -70,11 +69,11 @@ export default {
     // enabled: true,
   },
   abiExporter: {
-    path: '../../abis/matic-staker',
+    path: "../../abis/matic-staker",
     runOnCompile: true,
     clear: true,
     flat: true,
-    only: [':TruStakeMATICv2'],
+    only: [":TruStakeMATICv2"],
     spacing: 2,
     format: "json" // minimal
   }

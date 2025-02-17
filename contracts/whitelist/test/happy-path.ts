@@ -17,14 +17,18 @@ describe("HAPPY PATH", () => {
   };
 
   beforeEach(async function () {
-
     [owner, agent, user] = await ethers.getSigners();
 
-    // currently mock objects are called separately whenever needed
-    const whiteListFactory = await ethers.getContractFactory("MasterWhitelist");
-    whitelist = await upgrades.deployProxy(whiteListFactory, []);
+    // Deploy a mocked keyring checker for testing purposes
+    const keyringCheckerFactory = await ethers.getContractFactory("MockedKeyringChecker");
+    const keyringChecker = await keyringCheckerFactory.deploy();
+    const keyringPolicyId = 1; // Just a random policy id non-zero
 
-    // add an agent
+    // Deploy the whitelist contract
+    const whiteListFactory = await ethers.getContractFactory("MasterWhitelist");
+    whitelist = await upgrades.deployProxy(whiteListFactory, [keyringChecker.address, keyringPolicyId]);
+
+    // Add an agent
     whitelist.connect(owner).addAgent(agent.address);
   });
 
@@ -199,5 +203,4 @@ describe("HAPPY PATH", () => {
       .to.emit(whitelist, "WhitelistingStatusChanged")
       .withArgs(user.address, WhitelistingStatus.Blacklisted, WhitelistingStatus.Whitelisted);
   });
-
 });
