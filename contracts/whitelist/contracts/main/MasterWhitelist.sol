@@ -57,8 +57,8 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     /// @dev Override this function to change the permissioning scheme.
     function hasPermission(address account) public view virtual returns (bool) {
         // Keyring is turned on, so perform Keyring checks
-        Keyring k = Keyring(KEYRING);
-        return k.checkCredential(POLICYID, account);
+        Keyring k = Keyring(keyringChecker);
+        return k.checkCredential(policyId, account);
     }
 
     /// @notice Adds an agent to the list of agents.
