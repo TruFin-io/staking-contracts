@@ -215,4 +215,13 @@ describe("HAPPY PATH", () => {
     // expect user to be whitelisted
     expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(true);
   });
+
+  it("should allow an agent to set the keyring configuration", async function () {
+    const anotherKeyringChecker = "0x1234567890123456789012345678901234567890";
+    const anotherPolicyId = 5;
+    await whitelist.connect(agent).setKeyringConfiguration(anotherKeyringChecker, anotherPolicyId);
+
+    expect(await whitelist.keyringChecker()).to.equal(anotherKeyringChecker);
+    expect(await whitelist.keyringPolicyId()).to.equal(anotherPolicyId);
+  });
 });

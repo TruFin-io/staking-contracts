@@ -142,4 +142,11 @@ describe("UNHAPPY PATH", () => {
       "WhitelistingStatusAlreadyCleared"
     );
   });
+
+  it("should revert if trying to set keyring configuration if not an agent", async function () {
+    await expect(whitelist.connect(user).setKeyringConfiguration(AddressZero, 0)).to.be.revertedWithCustomError(
+      whitelist,
+      "CallerIsNotAnAgent"
+    );
+  });
 });
