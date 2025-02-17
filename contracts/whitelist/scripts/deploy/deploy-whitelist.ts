@@ -6,8 +6,14 @@ const contractName = "MasterWhitelist";
 // This script will deploy the contract implementation, proxy and proxy admin.
 async function main() {
   const chainID = network.config.chainId;
+  if (!process.env.KEYRING_CHECKER) {
+    throw new Error("KEYRING_CHECKER environment variable is not set");
+  }
+  if (!process.env.KEYRING_POLICY_ID) {
+    throw new Error("KEYRING_POLICY_ID environment variable is not set");
+  }
   const keyringCheckerAddress = process.env.KEYRING_CHECKER;
-  const keyringPolicyId = process.env.KEYRING_POLICY_ID;
+  const keyringPolicyId = BigNumber.from(process.env.KEYRING_POLICY_ID);
 
   console.log(`Chain ID: ${chainID}`);
   console.log(`Keyring Checker Address: ${keyringCheckerAddress}`);
