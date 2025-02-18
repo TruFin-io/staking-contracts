@@ -5,6 +5,7 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 describe("HAPPY PATH", () => {
   let whitelist: Contract;
+  let keyringChecker: Contract;
   let owner;
   let agent;
   let user;
@@ -17,14 +18,18 @@ describe("HAPPY PATH", () => {
   };
 
   beforeEach(async function () {
-
     [owner, agent, user] = await ethers.getSigners();
 
-    // currently mock objects are called separately whenever needed
-    const whiteListFactory = await ethers.getContractFactory("MasterWhitelist");
-    whitelist = await upgrades.deployProxy(whiteListFactory, []);
+    // Deploy a mocked keyring checker for testing purposes
+    const keyringCheckerFactory = await ethers.getContractFactory("MockedKeyringChecker");
+    keyringChecker = await keyringCheckerFactory.deploy();
+    const keyringPolicyId = 1; // Just a random policy id non-zero
 
-    // add an agent
+    // Deploy the whitelist contract
+    const whiteListFactory = await ethers.getContractFactory("MasterWhitelist");
+    whitelist = await upgrades.deployProxy(whiteListFactory, [keyringChecker.address, keyringPolicyId]);
+
+    // Add an agent
     whitelist.connect(owner).addAgent(agent.address);
   });
 
@@ -200,4 +205,23 @@ describe("HAPPY PATH", () => {
       .withArgs(user.address, WhitelistingStatus.Blacklisted, WhitelistingStatus.Whitelisted);
   });
 
+  it("should allow a user to be whitelisted if they have a Keyring credential while not being explicitly whitelisted", async function () {
+    // expect non whitelisted user to be refused
+    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(false);
+
+    // set allow to true
+    await keyringChecker.setAllow(true);
+
+    // expect user to be whitelisted
+    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(true);
+  });
+
+  it("should allow an agent to set the keyring configuration", async function () {
+    const anotherKeyringChecker = "0x1234567890123456789012345678901234567890";
+    const anotherPolicyId = 5;
+    await whitelist.connect(agent).setKeyringConfiguration(anotherKeyringChecker, anotherPolicyId);
+
+    expect(await whitelist.keyringChecker()).to.equal(anotherKeyringChecker);
+    expect(await whitelist.keyringPolicyId()).to.equal(anotherPolicyId);
+  });
 });

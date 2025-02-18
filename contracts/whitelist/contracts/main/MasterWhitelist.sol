@@ -4,6 +4,7 @@ pragma solidity =0.8.19;
 
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {IMasterWhitelist} from "../interfaces/IMasterWhitelist.sol";
+import {IKeyringChecker} from "../interfaces/IKeyringChecker.sol";
 
 /// @title Master Whitelist
 /// @notice Contract that manages a whitelist of users.
@@ -14,8 +15,19 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     /// @notice Whitelist for users.
     mapping(address => WhitelistingStatus) public users;
 
+    /// @notice The address of the Keyring contract.
+    /// @dev This could have been immutable, but not possible in upgradeable contracts.
+    /// @dev Consumes one storage slot.
+    IKeyringChecker public keyringChecker;
+
+    /// @notice The policyId to use with the Keyring contract.
+    /// @dev This could have been immutable, but not possible in upgradeable contracts.
+    /// @dev Consumes one storage slot.
+    uint32 public keyringPolicyId;
+
     /// @notice Gap for upgradeability.
-    uint256[50] private __gap;
+    /// @dev Two storage slots taken by keyringChecker and policyId.
+    uint256[48] private __gap;
 
     // No storage variables should be removed or modified since this is an upgradeable contract.
     // It is safe to add new ones as long as they are declared after the existing ones.
@@ -35,18 +47,19 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     }
 
     /// @notice Initializer for the whitelist.
-    function initialize() external initializer {
+    function initialize(address _keyringChecker, uint32 _keyringPolicyId) external initializer {
         __Ownable_init();
+        setKeyringConfiguration(_keyringChecker, _keyringPolicyId);
     }
 
     /// @notice Adds an agent to the list of agents.
     /// @param _agent The address of the agent.
     function addAgent(address _agent) external onlyAgent {
-        if(_agent == owner()){
+        if (_agent == owner()) {
             revert CannotAddOwner();
         }
 
-        if(agents[_agent]){
+        if (agents[_agent]) {
             revert UserAlreadyAnAgent();
         }
 
@@ -58,11 +71,11 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
     /// @notice Removes an agent from the list of agents.
     /// @param _agent The address of the agent.
     function removeAgent(address _agent) external onlyAgent {
-        if (_agent == owner()){
+        if (_agent == owner()) {
             revert CannotRemoveOwner();
         }
 
-        if (!agents[_agent]){
+        if (!agents[_agent]) {
             revert UserIsNotAnAgent();
         }
 
@@ -107,11 +120,22 @@ contract MasterWhitelist is OwnableUpgradeable, IMasterWhitelist {
         users[_user] = WhitelistingStatus.None;
     }
 
-    /// @notice Checks if a user is whitelisted.
+    /// @notice Checks if a user is whitelisted or has credentials in Keyring.
     /// @param _user The address to check.
     /// @return A value indicating whether this user is whitelisted.
     function isUserWhitelisted(address _user) external view returns (bool) {
-        return users[_user] == WhitelistingStatus.Whitelisted;
+        return users[_user] == WhitelistingStatus.Whitelisted || keyringChecker.checkCredential(keyringPolicyId, _user);
+    }
+
+    /// @notice Sets the keyring configuration.
+    /// @param _keyringChecker The address of the keyring checker.
+    /// @param _keyringPolicyId The policy id of the keyring.
+    function setKeyringConfiguration(address _keyringChecker, uint32 _keyringPolicyId) public onlyAgent {
+        if (address(_keyringChecker) == address(0) || _keyringPolicyId == 0) {
+            revert InvalidKeyringConfiguration(address(_keyringChecker), _keyringPolicyId);
+        }
+        keyringChecker = IKeyringChecker(_keyringChecker);
+        keyringPolicyId = _keyringPolicyId;
     }
 
     /// @notice Checks if a user is blacklisted.
