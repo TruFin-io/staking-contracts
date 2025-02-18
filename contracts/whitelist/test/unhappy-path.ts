@@ -144,9 +144,24 @@ describe("UNHAPPY PATH", () => {
   });
 
   it("should revert if trying to set keyring configuration if not an agent", async function () {
-    await expect(whitelist.connect(user).setKeyringConfiguration(AddressZero, 0)).to.be.revertedWithCustomError(
+    await expect(whitelist.connect(user).setKeyringConfiguration(AddressZero, 1)).to.be.revertedWithCustomError(
       whitelist,
       "CallerIsNotAnAgent"
+    );
+  });
+
+  it("should revert if trying to set keying address to zero", async function () {
+    const nonZeroAddress = "0x1234567890123456789012345678901234567890";
+    await expect(whitelist.connect(agent).setKeyringConfiguration(nonZeroAddress, 0)).to.be.revertedWithCustomError(
+      whitelist,
+      "InvalidKeyringConfiguration"
+    );
+  });
+
+  it("should revert if trying to set keyring policy id to zero", async function () {
+    await expect(whitelist.connect(agent).setKeyringConfiguration(AddressZero, 0)).to.be.revertedWithCustomError(
+      whitelist,
+      "InvalidKeyringConfiguration"
     );
   });
 });
