@@ -1,5 +1,11 @@
 [
     {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -67,6 +73,57 @@
         ],
         "name": "Transfer",
         "type": "event"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "pol",
+                "type": "bool"
+            }
+        ],
+        "name": "_restake",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "maximumSharesToBurn",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "pol",
+                "type": "bool"
+            }
+        ],
+        "name": "_sellVoucher_new",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
     },
     {
         "constant": true,
@@ -171,6 +228,78 @@
             }
         ],
         "name": "buyVoucher",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "amountToDeposit",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minSharesToMint",
+                "type": "uint256"
+            }
+        ],
+        "name": "buyVoucherPOL",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "amountToDeposit",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_amount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_minSharesToMint",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "deadline",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "v",
+                "type": "uint8"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "r",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "s",
+                "type": "bytes32"
+            }
+        ],
+        "name": "buyVoucherWithPermit",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -552,6 +681,21 @@
         "type": "function"
     },
     {
+        "constant": true,
+        "inputs": [],
+        "name": "polToken",
+        "outputs": [
+            {
+                "internalType": "contract IERC20Permit",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [],
         "name": "renounceOwnership",
@@ -564,6 +708,26 @@
         "constant": false,
         "inputs": [],
         "name": "restake",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "restakePOL",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -629,7 +793,47 @@
                 "type": "uint256"
             }
         ],
+        "name": "sellVoucherPOL",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "maximumSharesToBurn",
+                "type": "uint256"
+            }
+        ],
         "name": "sellVoucher_new",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "maximumSharesToBurn",
+                "type": "uint256"
+            }
+        ],
+        "name": "sellVoucher_newPOL",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
@@ -799,6 +1003,32 @@
         "type": "function"
     },
     {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transferPOL",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "constant": true,
         "inputs": [
             {
@@ -896,6 +1126,15 @@
     },
     {
         "constant": false,
+        "inputs": [],
+        "name": "unstakeClaimTokensPOL",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
         "inputs": [
             {
                 "internalType": "uint256",
@@ -904,6 +1143,21 @@
             }
         ],
         "name": "unstakeClaimTokens_new",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "unbondNonce",
+                "type": "uint256"
+            }
+        ],
+        "name": "unstakeClaimTokens_newPOL",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
@@ -988,6 +1242,15 @@
         "constant": false,
         "inputs": [],
         "name": "withdrawRewards",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "withdrawRewardsPOL",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",

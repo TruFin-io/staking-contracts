@@ -9,13 +9,13 @@ typechain-types
 cache
 artifacts
 
+# Foundry files
+out
+lib
+lcov.info
+
 # MacOS
 .DS_Store
 unknown-31337.json
 
 .env
-
-# Lerna
-lerna-debug.log
-
-
