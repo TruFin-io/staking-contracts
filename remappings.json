@@ -1,3 +1,3 @@
 {
-    "remappings":["@openzeppelin/=/tmp/node_modules/@openzeppelin/"]
+    "remappings":["@openzeppelin/=/tmp/node_modules/@openzeppelin/","@gnosis.pm/=/tmp/node_modules/@gnosis.pm/"]
 }

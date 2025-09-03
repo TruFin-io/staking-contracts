@@ -12,8 +12,6 @@ Tasks can be run for all the projects at once from the root folder.
 `npm run export-abis`: compiles the contracts and export the abis to a common folder.
 `npm run size-contracts`: compiles the contracts and outputs the compiled contract sizes (might need to use `sudo`).
 
-To target a package in particular, you can either target the relevant package by doing `lerna run test --scope whitelist` or you can navigate to the package and run the relevant npm task.
-
 ### Slither Analysis
 
 #### How to install
@@ -25,10 +23,6 @@ Slither is a python module, hence simply install the `pip3 install -r requiremen
 To run slither all contracts folders run: 
 
 `npm run slither`
-
-Execute slither on one specific folder only: 
-
-`lerna exec slither . --scope whitelist`
 
 
 ### Mythril Analysis

@@ -1,0 +1,50 @@
+{
+  "name": "pol-staker",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "npx hardhat test",
+    "lint": "npm run lint:sol && npm run lint:ts && npm run prettier:check",
+    "lint:sol": "forge fmt --check && solhint \"{scripts,contracts}/**/*.sol\"",
+    "lint:ts": "eslint --ignore-path ./.eslintignore --ext .js,.ts .",
+    "prettier:write": "prettier --write \"**/*.{js,json,md,ts,yml}\"",
+    "prettier:check": "prettier --check \"**/*.{js,json,md,ts,yml}\"",
+    "coverage-sol": "hardhat coverage",
+    "forge-coverage:report": "./shell/coverage.sh",
+    "check-gas": "forge snapshot --match-test '^test.*' && REPORT_GAS=true hardhat test",
+    "size-contracts": "npx hardhat size-contracts",
+    "export-abis": "npx hardhat export-abi",
+    "slither": "slither .",
+    "clean": "npx hardhat clean"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/hardhat-upgrades": "^3.9.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.7",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "cli-color": "^2.0.3",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "hardhat": "^2.22.19",
+    "hardhat-abi-exporter": "^2.10.1",
+    "hardhat-change-network": "^0.0.7",
+    "hardhat-contract-sizer": "^2.10.0",
+    "prettier": "^3.2.4",
+    "solhint": "^5.0.3"
+  },
+  "dependencies": {
+    "@ethersproject/constants": "^5.7.0",
+    "@openzeppelin/contracts": "^5.2.0",
+    "@openzeppelin/contracts-upgradeable": "^5.2.0",
+    "dotenv": "^16.4.1",
+    "envfile": "^7.1.0",
+    "forge-std": "github:foundry-rs/forge-std#v1.9.6"
+  }
+}
