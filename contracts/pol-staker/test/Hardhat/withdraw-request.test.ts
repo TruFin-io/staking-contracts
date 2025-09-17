@@ -107,7 +107,7 @@ describe("Withdraw request", () => {
     await staker.connect(one).withdraw(parseEther(10000));
 
     // Check vault values
-    expect(await staker.totalStaked()).to.equal(parseEther(0) + TREASURY_INITIAL_DEPOSIT - constants.EPSILON); // should not have changed
+    expect(await staker.totalStaked()).to.equal(parseEther(0) + TREASURY_INITIAL_DEPOSIT); // should not have changed
 
     // Check user values
     expect(await staker.balanceOf(one.address)).to.equal(parseEther(0));
@@ -115,7 +115,7 @@ describe("Withdraw request", () => {
     const unbondNonce = await staker.getUnbondNonce(validatorShare);
     const [user, amount] = await staker.withdrawals(validatorShare, unbondNonce);
     expect(user).to.equal(one.address);
-    expect(amount).to.equal(parseEther(10000) + constants.EPSILON);
+    expect(amount).to.equal(parseEther(10000));
   });
 
   it("initiate a complete withdrawal from a specific validator", async () => {
@@ -126,7 +126,7 @@ describe("Withdraw request", () => {
     await staker.connect(one).withdrawFromSpecificValidator(parseEther(10000), validatorShare);
 
     // Check vault values
-    expect(await staker.totalStaked()).to.equal(parseEther(0) + TREASURY_INITIAL_DEPOSIT - constants.EPSILON); // should not have changed
+    expect(await staker.totalStaked()).to.equal(parseEther(0) + TREASURY_INITIAL_DEPOSIT); // should not have changed
 
     // Check user values
     expect(await staker.balanceOf(one.address)).to.equal(parseEther(0));
@@ -134,7 +134,7 @@ describe("Withdraw request", () => {
     const unbondNonce = await staker.getUnbondNonce(validatorShare);
     const [user, amount] = await staker.withdrawals(validatorShare, unbondNonce);
     expect(user).to.equal(one.address);
-    expect(amount).to.equal(parseEther(10000) + constants.EPSILON);
+    expect(amount).to.equal(parseEther(10000));
   });
 
   it("initiate multiple partial withdrawals", async () => {
@@ -170,7 +170,7 @@ describe("Withdraw request", () => {
     const totalShares = await staker.totalSupply();
     const sharePrice = await staker.sharePrice();
     const withdrawAmt = parseEther(3e6);
-    const withdrawShares = calculateSharesFromAmount(withdrawAmt, sharePrice);
+    const withdrawShares = calculateSharesFromAmount(withdrawAmt, sharePrice) + 1n; // add 1 to round up shares
     const shareDecUsr = withdrawShares;
     const shareIncTsy =
       (totalRewards * constants.FEE * parseEther(1) * sharePrice[1]) / sharePrice[0] / constants.FEE_PRECISION;

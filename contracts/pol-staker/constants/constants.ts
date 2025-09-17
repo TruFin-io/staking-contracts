@@ -44,8 +44,6 @@ export const DELEGATE_REGISTRY_CONTRACT_ADDRESS = {
 };
 
 // Other args
-export const EPSILON = 10000n;
-
 export const FEE = 1000n;
 
 export const FEE_PRECISION = 10000n;

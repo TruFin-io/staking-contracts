@@ -45,7 +45,7 @@ contract WithdrawTests is WithdrawState {
         (uint256 sharePriceNum, uint256 sharePriceDenom) = staker.sharePrice();
         assertEq(sharePriceNum / sharePriceDenom, 1e18);
 
-        // get the max withdraw amount (inclusive of epsilon)
+        // get the max withdraw amount
         uint256 maxWithdraw = staker.maxWithdraw(alice);
 
         // user can withdraw the max amount
@@ -62,7 +62,7 @@ contract WithdrawTests is WithdrawState {
         (uint256 sharePriceNum, uint256 sharePriceDenom) = staker.sharePrice();
         assertEq(sharePriceNum / sharePriceDenom, 1e18);
 
-        // get the max withdraw amount (inclusive of epsilon)
+        // get the max withdraw amount
         uint256 maxWithdraw = staker.maxWithdraw(alice);
 
         // user trying to withdraw more than max amount should revert
@@ -84,7 +84,7 @@ contract WithdrawTests is WithdrawState {
         mockUnbondNonce(defaultValidatorAddress);
         mockGetEpoch(3456, stakeManagerContractAddress);
 
-        // get the max withdraw amount (inclusive of epsilon)
+        // get the max withdraw amount
         uint256 maxWithdraw = staker.maxWithdraw(alice);
 
         // user can withdraw the max amount
@@ -104,7 +104,7 @@ contract WithdrawTests is WithdrawState {
         mockUnbondNonce(defaultValidatorAddress);
         mockGetEpoch(3456, stakeManagerContractAddress);
 
-        // get the max withdraw amount (inclusive of epsilon)
+        // get the max withdraw amount
         uint256 maxWithdraw = staker.maxWithdraw(alice);
 
         // user trying to withdraw more than max amount should revert
@@ -159,14 +159,12 @@ contract WithdrawTests is WithdrawState {
         vm.startPrank(alice);
         staker.withdraw(depositAmount);
 
-        uint256 epsilon = readEpsilon(storageTarget);
-
-        assertEq(staker.totalStaked(), reserve - epsilon);
+        assertEq(staker.totalStaked(), reserve);
         assertEq(staker.balanceOf(alice), 0);
 
         Withdrawal memory withdrawal = staker.withdrawals(defaultValidatorAddress, 0);
         assertEq(withdrawal.user, alice);
-        assertEq(withdrawal.amount, depositAmount + epsilon);
+        assertEq(withdrawal.amount, depositAmount);
     }
 
     function testMultiplePartialWithdrawals() public {
@@ -202,7 +200,7 @@ contract WithdrawTests is WithdrawState {
         uint256 totalShares = staker.totalSupply();
         (uint256 sharePriceNum, uint256 sharePriceDenom) = staker.sharePrice();
         uint256 withdrawAmt = 1e18;
-        uint256 withdrawShares = staker.convertToShares(withdrawAmt);
+        uint256 withdrawShares = staker.previewWithdraw(withdrawAmt);
         uint256 treasuryShares = (totalRewards * fee * 1e18 * sharePriceDenom) / (sharePriceNum * FEE_PRECISION);
 
         assertEq(totalRewards, 10 * 1e18);
@@ -320,13 +318,12 @@ contract WithdrawFromSpecificValidator is WithdrawState {
         vm.prank(charlie);
         staker.withdrawFromSpecificValidator(depositAmount, secondValidatorAddress);
 
-        uint256 epsilon = readEpsilon(storageTarget);
-        assertEq(staker.totalStaked(), 2 * reserve + depositAmount - epsilon);
+        assertEq(staker.totalStaked(), 2 * reserve + depositAmount);
         assertEq(staker.balanceOf(charlie), 0);
 
         Withdrawal memory withdrawal = staker.withdrawals(secondValidatorAddress, 0);
         assertEq(withdrawal.user, charlie);
-        assertEq(withdrawal.amount, depositAmount + epsilon);
+        assertEq(withdrawal.amount, depositAmount);
     }
 
     function testTreasuryOnlyMintedSharesForClaimedRewards() public {

@@ -37,7 +37,6 @@ struct StakerInfo {
     address defaultValidatorAddress;
     address whitelistAddress;
     address delegateRegistry;
-    uint256 epsilon;
     uint256 fee;
     uint256 minDeposit;
 }

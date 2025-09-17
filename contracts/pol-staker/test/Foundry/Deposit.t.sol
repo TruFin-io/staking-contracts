@@ -104,7 +104,7 @@ contract DepositTests is DepositState {
         (maxRedeemable, maxWithdrawAmount, globalPriceNum, globalPriceDenom, epoch) = staker.getUserInfo(alice);
 
         assertEq(maxRedeemable, depositAmount);
-        assertEq(maxWithdrawAmount, depositAmount + staker.stakerInfo().epsilon);
+        assertEq(maxWithdrawAmount, depositAmount);
         assertEq(globalPriceNum, depositAmount * SHARE_PRICE_PRECISION);
         assertEq(globalPriceDenom, depositAmount * FEE_PRECISION);
         assertEq(epoch, 123);

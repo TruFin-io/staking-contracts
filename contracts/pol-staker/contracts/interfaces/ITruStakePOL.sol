@@ -38,9 +38,6 @@ interface ITruStakePOL {
     /// @notice Error thrown when a user tries to claim a withdrawal that does not exist.
     error WithdrawClaimNonExistent();
 
-    /// @notice Error thrown when epsilon is set too high.
-    error EpsilonTooLarge();
-
     /// @notice Error thrown when the new minimum deposit amount is too small.
     error MinDepositTooSmall();
 
@@ -206,11 +203,6 @@ interface ITruStakePOL {
     /// @param _oldFee The old fee.
     /// @param _newFee The new fee.
     event SetFee(uint256 indexed _oldFee, uint256 indexed _newFee);
-
-    /// @notice Emitted when the epsilon is set.
-    /// @param _oldEpsilon The old epsilon.
-    /// @param _newEpsilon The new epsilon.
-    event SetEpsilon(uint256 indexed _oldEpsilon, uint256 indexed _newEpsilon);
 
     /// @notice Emitted when the minimum deposit is set.
     /// @param _oldMinDeposit The old minimum deposit.

@@ -1,7 +1,6 @@
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 
-import { EPSILON } from "../helpers/constants";
 import { deployment } from "../helpers/fixture";
 import { parseEther, sharesToPOL } from "../helpers/math";
 import { submitCheckpoint } from "../helpers/state-interaction";
@@ -28,8 +27,8 @@ describe("Multi checkpoints", () => {
   describe("Lifecycle testing", () => {
     it("Depositors correctly accrue across multiple checkpoints; depositor and treasury can withdraw max", async () => {
       // check initial balances (POL)
-      expect(await staker.maxWithdraw(one.address)).to.equal(DEPOSITED_AMOUNT + EPSILON);
-      expect(await staker.maxWithdraw(treasury.address)).to.equal(TREASURY_INITIAL_DEPOSIT + EPSILON);
+      expect(await staker.maxWithdraw(one.address)).to.equal(DEPOSITED_AMOUNT);
+      expect(await staker.maxWithdraw(treasury.address)).to.equal(TREASURY_INITIAL_DEPOSIT);
 
       // check initial share balances (TruPOL)
       const oneInitialBalance = await staker.balanceOf(one.address);
@@ -54,16 +53,13 @@ describe("Multi checkpoints", () => {
       expect(await staker.balanceOf(one.address)).to.equal(oneBalance);
 
       // one rewards increase
-      expect(await staker.maxWithdraw(one.address)).to.closeTo(DEPOSITED_AMOUNT + onePOLRewards + EPSILON, 1);
+      expect(await staker.maxWithdraw(one.address)).to.closeTo(DEPOSITED_AMOUNT + onePOLRewards, 1);
 
       // four rewards increase (same as one)
-      expect(await staker.maxWithdraw(four.address)).to.closeTo(DEPOSITED_AMOUNT + onePOLRewards + EPSILON, 1);
+      expect(await staker.maxWithdraw(four.address)).to.closeTo(DEPOSITED_AMOUNT + onePOLRewards, 1);
 
       // treasury rewards increase
-      expect(await staker.maxWithdraw(treasury.address)).to.closeTo(
-        TREASURY_INITIAL_DEPOSIT + trsyPOLRewards + EPSILON,
-        1,
-      );
+      expect(await staker.maxWithdraw(treasury.address)).to.closeTo(TREASURY_INITIAL_DEPOSIT + trsyPOLRewards, 1);
 
       // ACCRUE 2
       await submitCheckpoint(1);
@@ -80,13 +76,13 @@ describe("Multi checkpoints", () => {
       // WITHDRAW
       // one withdrawal
       const oneMaxWithdraw = await staker.maxWithdraw(one.address);
-      expect(oneMaxWithdraw).to.be.greaterThan(DEPOSITED_AMOUNT + EPSILON);
+      expect(oneMaxWithdraw).to.be.greaterThan(DEPOSITED_AMOUNT);
       await staker.connect(one).withdraw(oneMaxWithdraw);
       expect(await staker.maxWithdraw(one.address)).to.equal(0n);
 
       // four max withdrawal
       const fourMaxWithdraw = await staker.maxWithdraw(four.address);
-      expect(fourMaxWithdraw).to.be.greaterThan(DEPOSITED_AMOUNT + EPSILON);
+      expect(fourMaxWithdraw).to.be.greaterThan(DEPOSITED_AMOUNT);
 
       // treasury withdrawal
       const trsyMaxWithdraw = await staker.maxWithdraw(treasury.address);

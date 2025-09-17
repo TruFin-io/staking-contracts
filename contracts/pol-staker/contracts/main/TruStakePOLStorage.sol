@@ -22,8 +22,6 @@ abstract contract TruStakePOLStorage {
         /// @notice The whitelist contract keeps track of what users can interact with
         ///   certain function in the TruStakePOL contract.
         address _whitelistAddress;
-        /// @notice Value to offset rounding errors.
-        uint256 _epsilon;
         /// @notice Cap on the smallest amount one can deposit to the staker.
         uint256 _minDeposit;
         /// @notice Mapping of a validator address to the validator struct.

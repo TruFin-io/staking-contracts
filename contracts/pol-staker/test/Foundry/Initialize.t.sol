@@ -65,7 +65,6 @@ contract InitializeTest is Test {
         );
 
         StakerInfo memory stakerInfo = staker.stakerInfo();
-        assertEq(stakerInfo.epsilon, 1e4);
         assertEq(stakerInfo.minDeposit, 1e18);
 
         // check that the initial share price is 1

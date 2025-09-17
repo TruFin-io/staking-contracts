@@ -33,7 +33,6 @@ describe("Upgrade", () => {
       defaultValidatorAddress,
       whitelistAddress,
       delegateRegistry,
-      epsilon,
       fee,
       minDeposit,
     } = await staker.stakerInfo();
@@ -49,14 +48,14 @@ describe("Upgrade", () => {
     expect(await stakerInfo.defaultValidatorAddress).is.equal(defaultValidatorAddress);
     expect(await stakerInfo.whitelistAddress).is.equal(whitelistAddress);
     expect(await stakerInfo.delegateRegistry).is.equal(delegateRegistry);
-    expect(await stakerInfo.epsilon).is.equal(epsilon);
     expect(await stakerInfo.fee).is.equal(fee);
     expect(await stakerInfo.minDeposit).is.equal(minDeposit);
   });
 });
 
 const forkAtBlock = async () => {
-  const forkBlock = 9116787;
+  // the block when the Staker we should upgrade from was deployed to Sepolia
+  const forkBlock = 9209005;
   const proxyAdminOwner = "0xbb447Ff57D2Be03F6804aEB1A7d1ca06c01eD0C3";
   const [deployer] = await ethers.getSigners();
 
