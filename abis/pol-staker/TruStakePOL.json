@@ -102,11 +102,6 @@
   },
   {
     "inputs": [],
-    "name": "EpsilonTooLarge",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "ExpectedPause",
     "type": "error"
   },
@@ -526,25 +521,6 @@
       }
     ],
     "name": "SetDelegateRegistry",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_oldEpsilon",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_newEpsilon",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetEpsilon",
     "type": "event"
   },
   {
@@ -1465,19 +1441,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_epsilon",
-        "type": "uint256"
-      }
-    ],
-    "name": "setEpsilon",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint16",
         "name": "_fee",
         "type": "uint16"
@@ -1615,11 +1578,6 @@
             "internalType": "address",
             "name": "delegateRegistry",
             "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "epsilon",
-            "type": "uint256"
           },
           {
             "internalType": "uint256",

@@ -2,7 +2,6 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { formatEther } from "ethers";
 
-import { EPSILON } from "../helpers/constants";
 import { deployment } from "../helpers/fixture";
 import { attackerDeployment } from "../helpers/fixture-attacker";
 import { parseEther, sharePriceEquality } from "../helpers/math";
@@ -141,7 +140,7 @@ describe("Attacks", () => {
       );
 
       // initate withdrawal with user one
-      await staker.connect(one).withdraw(parseEther(0.9999999999999999));
+      await staker.connect(one).withdraw(parseEther(0.9999999999999999)); // leave a tiny amount behind (100 wei)
 
       console.log("\nAddress A withdraw requests 0.9999999999999999 POL\n");
 
@@ -198,16 +197,16 @@ describe("Attacks", () => {
 
       // User A and B TruPOL balances (1 POL : 0.9999 TruPOL)
       expect(await staker.balanceOf(one.address)).to.equal(parseEther(0));
-      expect(await staker.balanceOf(two.address)).to.be.greaterThan(parseEther(1));
+      expect(await staker.balanceOf(two.address)).to.be.equal(parseEther(1));
 
       // User A and B POL balances
-      expect(await staker.maxWithdraw(two.address)).to.be.closeTo(parseEther(1) + EPSILON, 1);
+      expect(await staker.maxWithdraw(two.address)).to.be.closeTo(parseEther(1), 1);
       expect(await staker.maxWithdraw(one.address)).to.equal(parseEther(0));
 
       // Share Price now equals initial share price after deposit price for A
       const curPrice = sharePrice[0] / sharePrice[1];
       const sharePriceAfterDepositFloat = sharePriceAfterADeposits[0] / sharePriceAfterADeposits[1];
-      expect(curPrice).to.be.closeTo(sharePriceAfterDepositFloat, EPSILON);
+      expect(curPrice).to.equal(sharePriceAfterDepositFloat);
     });
   });
 

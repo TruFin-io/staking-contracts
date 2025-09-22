@@ -61,7 +61,7 @@ contract ERC20 is BaseState {
         uint256 totalSupply = staker.totalSupply();
         uint256 withdrawAmount = 1e18;
         (uint256 sharePriceNum, uint256 sharePriceDenom) = staker.sharePrice();
-        uint256 sharesBurned = (withdrawAmount * sharePriceDenom * 1e18) / sharePriceNum;
+        uint256 sharesBurned = (withdrawAmount * sharePriceDenom * 1e18) / sharePriceNum + 1; // round up
         uint256 treasurySharesMinted = (rewards * fee * 1e18 * sharePriceDenom) / (sharePriceNum * FEE_PRECISION);
 
         vm.prank(alice);

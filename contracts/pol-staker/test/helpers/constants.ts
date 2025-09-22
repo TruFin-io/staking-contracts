@@ -64,7 +64,7 @@ export const WHITELIST_ADDRESS = {
 
 export const STAKER_ADDRESS = {
   [CHAIN_ID.ETH_MAINNET]: "0xA43A7c62D56dF036C187E1966c03E2799d8987ed",
-  [CHAIN_ID.SEPOLIA]: "0x2F63A7C764fEb7A4E5834E1210Ca5267cf0edC11",
+  [CHAIN_ID.SEPOLIA]: "0xc5665E5AFA9180B3A033f34fA7aDed0E45560D75",
 };
 
 // ABIs
@@ -86,8 +86,6 @@ export const STAKER_ABI = StakerABI;
 export const SEPOLIA_POL_STAKER_ABI = SepoliaPOLStakerABI;
 
 // Other args
-export const EPSILON = 10000n;
-
 export const FEE = 1000n;
 
 export const FEE_PRECISION = 10000n;

@@ -23,8 +23,35 @@ contract MaxWithdrawTests is BaseState {
         staker.deposit(depositAmount);
 
         // verify max withdraw after deposit
-        uint256 epsilon = staker.stakerInfo().epsilon;
-        assertEq(staker.maxWithdraw(alice), depositAmount + epsilon);
+        assertEq(staker.maxWithdraw(alice), depositAmount);
+    }
+
+    function testMaxWithdrawWithRounding() public {
+        // whitelist alice
+        mockIsUserWhitelisted(alice, true);
+
+        // mock share price value to 1.096813197226058417
+        uint256 sharePriceNum = 1821113913606475990877759022500;
+        uint256 sharePriceDenom = 1660368345505178809970772240000;
+        mockSetSharePrice(sharePriceNum, sharePriceDenom);
+
+        // Alice initial TruPOL and max withdraw is 0
+        assertEq(staker.balanceOf(alice), 0);
+        assertEq(staker.maxWithdraw(alice), 0);
+
+        // Alice deposits 1 million POL
+        uint256 depositAmount = 1_000_000 * 1e18;
+        mockBuyVoucherPOL(defaultValidatorAddress, depositAmount, depositAmount);
+        mockGetLiquidRewards(defaultValidatorAddress, 0);
+        mockBalanceOf(stakingTokenAddress, 0, address(staker));
+        mockAllowance(stakingTokenAddress, address(staker), stakeManagerContractAddress, depositAmount);
+
+        vm.startPrank(alice);
+        staker.deposit(depositAmount);
+
+        // verify Alice's max withdraw is 1 wei less than 1 million POL due to rounding
+        uint256 expectedMaxWithdraw = 999_999_999999999999999999;
+        assertEq(staker.maxWithdraw(alice), expectedMaxWithdraw);
     }
 
     function testPreviewFunctionCircularChecks() public {
@@ -42,9 +69,9 @@ contract MaxWithdrawTests is BaseState {
             uint256 polAmt = staker.previewRedeem(shareAmt);
             uint256 newShareAmt = staker.previewWithdraw(polAmt);
 
-            // verify that the preview share amount is approximately
-            // the same as the initial share amount
-            assertApproxEqAbs(shareAmt, newShareAmt, 1);
+            // verify that share amount is the same as
+            // the preview withdraw for the equivalent POL amount
+            assertEq(shareAmt, newShareAmt, "Preview withdraw/redeem should match");
 
             // increase share price by an arbitrary amount for the next iteration
             sharePriceNum += (5678901234567890123 * i);

@@ -26,7 +26,6 @@ contract BaseInvariantTest is Test {
     address constant DELEGATE_REGISTRY_ADDRESS = 0x32Bb2dB7826cf342743fe80832Fe4DF725879C2D;
 
     uint16 constant FEE_PRECISION = 1e4;
-    uint256 constant MAX_EPSILON = 1e12;
     uint256 constant SHARE_PRICE_PRECISION = 1e22;
     uint256 constant wad = 1e18;
 

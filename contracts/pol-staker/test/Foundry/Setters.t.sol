@@ -19,7 +19,6 @@ contract SettersTest is Test {
     uint16 public fee = 500;
 
     uint16 public constant FEE_PRECISION = 1e4;
-    uint256 public constant MAX_EPSILON = 1e12;
 
     function setUp() public virtual {
         TruStakePOL logic = new TruStakePOL();
@@ -162,39 +161,6 @@ contract SettersTest is Test {
     function testSetFeeWithTooHighFeeReverts() public {
         vm.expectRevert(abi.encodeWithSelector(ITruStakePOL.FeeTooLarge.selector));
         staker.setFee(FEE_PRECISION + 1);
-    }
-
-    function testSetEpsilon() public {
-        uint256 epsilon = staker.stakerInfo().epsilon;
-        uint256 newEpsilon = 2e4;
-        vm.expectEmit();
-        emit ITruStakePOL.SetEpsilon(epsilon, newEpsilon);
-
-        staker.setEpsilon(newEpsilon);
-
-        assertEq(staker.stakerInfo().epsilon, newEpsilon);
-    }
-
-    function testSetEpsilonToSameValue() public {
-        uint256 newEpsilon = 1e2;
-
-        staker.setEpsilon(newEpsilon);
-        staker.setEpsilon(newEpsilon);
-
-        assertEq(staker.stakerInfo().epsilon, newEpsilon);
-    }
-
-    function testSetEpsilonWithTooHighEpsilonReverts() public {
-        vm.expectRevert(abi.encodeWithSelector(ITruStakePOL.EpsilonTooLarge.selector));
-        staker.setEpsilon(MAX_EPSILON + 1);
-    }
-
-    function testSetEpsilonWithNonOwnerReverts() public {
-        address nonOwnerAddress = address(0x1234);
-        vm.expectRevert(abi.encodeWithSelector(OwnableUpgradeable.OwnableUnauthorizedAccount.selector, nonOwnerAddress));
-        vm.prank(nonOwnerAddress);
-
-        staker.setEpsilon(2e4);
     }
 
     function testSetMinDeposit() public {

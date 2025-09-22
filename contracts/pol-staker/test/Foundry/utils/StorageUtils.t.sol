@@ -83,12 +83,11 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     uint256 private constant _SLOT_STAKE_MANAGER = 2;
     uint256 private constant _SLOT_DEFAULT_VALIDATOR = 3;
     uint256 private constant _SLOT_WHITELIST = 4;
-    uint256 private constant _SLOT_EPSILON = 5;
-    uint256 private constant _SLOT_MIN_DEPOSIT = 6;
-    uint256 private constant _SLOT_VALIDATORS_MAPPING = 7;
-    uint256 private constant _SLOT_VALIDATOR_ARRAY = 8;
-    uint256 private constant _SLOT_WITHDRAWALS_MAPPING = 9;
-    uint256 private constant _SLOT_DELEGATE_REGISTRY = 10;
+    uint256 private constant _SLOT_MIN_DEPOSIT = 5;
+    uint256 private constant _SLOT_VALIDATORS_MAPPING = 6;
+    uint256 private constant _SLOT_VALIDATOR_ARRAY = 7;
+    uint256 private constant _SLOT_WITHDRAWALS_MAPPING = 8;
+    uint256 private constant _SLOT_DELEGATE_REGISTRY = 9;
 
     uint8 private constant _FEE_OFFSET = 160;
 
@@ -203,21 +202,7 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     }
 
     /*//////////////////////////////////////////////////////////////////////////
-    //                   SLOT 5 - Epsilon
-    //////////////////////////////////////////////////////////////////////////*/
-
-    // --- Getters ---
-    function readEpsilon(address target) internal view returns (uint256) {
-        return readUint256Field(target, _SLOT_EPSILON);
-    }
-
-    // --- Setters ---
-    function writeEpsilon(address target, uint256 value) internal {
-        writeUint256Field(target, _SLOT_EPSILON, value);
-    }
-
-    /*//////////////////////////////////////////////////////////////////////////
-    //                   SLOT 6 - Min Deposit
+    //                   SLOT 5 - Min Deposit
     //////////////////////////////////////////////////////////////////////////*/
 
     // --- Getters ---
@@ -231,7 +216,7 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     }
 
     /*//////////////////////////////////////////////////////////////////////////
-    //                   SLOT 7 - Validators Mapping
+    //                   SLOT 6 - Validators Mapping
     //////////////////////////////////////////////////////////////////////////*/
 
     // --- Getters ---
@@ -261,7 +246,7 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     }
 
     /*//////////////////////////////////////////////////////////////////////////
-    //                   SLOT 8 - Validator Addresses Array
+    //                   SLOT 7 - Validator Addresses Array
     //////////////////////////////////////////////////////////////////////////*/
 
     // --- Getters ---
@@ -287,7 +272,7 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     }
 
     /*//////////////////////////////////////////////////////////////////////////
-    //                   SLOT 9 - Withdrawals Mapping
+    //                   SLOT 8 - Withdrawals Mapping
     //////////////////////////////////////////////////////////////////////////*/
 
     // --- Getters ---
@@ -309,7 +294,7 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     }
 
     /*//////////////////////////////////////////////////////////////////////////
-    //                   SLOT 10 - Delegate Registry
+    //                   SLOT 9 - Delegate Registry
     //////////////////////////////////////////////////////////////////////////*/
 
     // --- Getters ---
@@ -432,16 +417,8 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
     }
 
     // --- SLOT 5–6: Uint256 Fields ---
-    function readEpsilon() internal view returns (uint256) {
-        return readEpsilon(storageTarget);
-    }
-
     function readMinDeposit() internal view returns (uint256) {
         return readMinDeposit(storageTarget);
-    }
-
-    function writeEpsilon(uint256 value) internal {
-        writeEpsilon(storageTarget, value);
     }
 
     function writeMinDeposit(uint256 value) internal {

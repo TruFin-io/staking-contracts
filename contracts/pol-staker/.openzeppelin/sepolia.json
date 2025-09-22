@@ -2,15 +2,15 @@
   "manifestVersion": "3.2",
   "proxies": [
     {
-      "address": "0x2F63A7C764fEb7A4E5834E1210Ca5267cf0edC11",
-      "txHash": "0x56970cfbc2e27ff5a56fda24689b08ad93e4945d8010685b2b44bb2805d5ec1d",
+      "address": "0xc5665E5AFA9180B3A033f34fA7aDed0E45560D75",
+      "txHash": "0x61b2184c890a5efbd8e6608065fc9ca6ba95501a9a94bc1071e66f7d1a1143bd",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "66798a057dc35d2ac6921a7a35cf555ae21943e634517141befc1123a5836cd4": {
-      "address": "0xA1e954e14DD26b18479924896b10Bd1F87E1d8Fa",
-      "txHash": "0x59df160473cadd0826d863ae74317b8b6a89fcd308446fe4240915f99f123841",
+    "903e7144b7b804eb38754a3524ee283f46d671ee958fd196f12e558ebe0aa346": {
+      "address": "0xFf0AF47d96206554C9689f83D152c1D62597AB20",
+      "txHash": "0xb8c597b6c9b2e6e69e9dbe912876758a23bdc3d2b538804381e162f19fa0aad8",
       "layout": {
         "solcVersion": "0.8.28",
         "storage": [],
@@ -27,7 +27,7 @@
             "label": "bool",
             "numberOfBytes": "1"
           },
-          "t_enum(ValidatorState)2863": {
+          "t_enum(ValidatorState)2837": {
             "label": "enum ValidatorState",
             "members": [
               "NONE",
@@ -40,11 +40,11 @@
             "label": "mapping(address => mapping(address => uint256))",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Withdrawal)2850_storage))": {
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Withdrawal)2824_storage))": {
             "label": "mapping(address => mapping(uint256 => struct Withdrawal))",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_address,t_struct(Validator)2859_storage)": {
+          "t_mapping(t_address,t_struct(Validator)2833_storage)": {
             "label": "mapping(address => struct Validator)",
             "numberOfBytes": "32"
           },
@@ -52,7 +52,7 @@
             "label": "mapping(address => uint256)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_struct(Withdrawal)2850_storage)": {
+          "t_mapping(t_uint256,t_struct(Withdrawal)2824_storage)": {
             "label": "mapping(uint256 => struct Withdrawal)",
             "numberOfBytes": "32"
           },
@@ -150,7 +150,7 @@
             ],
             "numberOfBytes": "32"
           },
-          "t_struct(TruStakePOLStorageStruct)2838_storage": {
+          "t_struct(TruStakePOLStorageStruct)2812_storage": {
             "label": "struct TruStakePOLStorage.TruStakePOLStorageStruct",
             "members": [
               {
@@ -190,50 +190,44 @@
                 "slot": "4"
               },
               {
-                "label": "_epsilon",
+                "label": "_minDeposit",
                 "type": "t_uint256",
                 "offset": 0,
                 "slot": "5"
               },
               {
-                "label": "_minDeposit",
-                "type": "t_uint256",
+                "label": "_validators",
+                "type": "t_mapping(t_address,t_struct(Validator)2833_storage)",
                 "offset": 0,
                 "slot": "6"
-              },
-              {
-                "label": "_validators",
-                "type": "t_mapping(t_address,t_struct(Validator)2859_storage)",
-                "offset": 0,
-                "slot": "7"
               },
               {
                 "label": "_validatorAddresses",
                 "type": "t_array(t_address)dyn_storage",
                 "offset": 0,
-                "slot": "8"
+                "slot": "7"
               },
               {
                 "label": "_withdrawals",
-                "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Withdrawal)2850_storage))",
+                "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Withdrawal)2824_storage))",
                 "offset": 0,
-                "slot": "9"
+                "slot": "8"
               },
               {
                 "label": "_delegateRegistry",
                 "type": "t_address",
                 "offset": 0,
-                "slot": "10"
+                "slot": "9"
               }
             ],
-            "numberOfBytes": "352"
+            "numberOfBytes": "320"
           },
-          "t_struct(Validator)2859_storage": {
+          "t_struct(Validator)2833_storage": {
             "label": "struct Validator",
             "members": [
               {
                 "label": "state",
-                "type": "t_enum(ValidatorState)2863",
+                "type": "t_enum(ValidatorState)2837",
                 "offset": 0,
                 "slot": "0"
               },
@@ -252,7 +246,7 @@
             ],
             "numberOfBytes": "96"
           },
-          "t_struct(Withdrawal)2850_storage": {
+          "t_struct(Withdrawal)2824_storage": {
             "label": "struct Withdrawal",
             "members": [
               {
@@ -425,7 +419,7 @@
             },
             {
               "contract": "TruStakePOLStorage",
-              "label": "_epsilon",
+              "label": "_minDeposit",
               "type": "t_uint256",
               "src": "contracts/main/TruStakePOLStorage.sol:26",
               "offset": 0,
@@ -433,43 +427,35 @@
             },
             {
               "contract": "TruStakePOLStorage",
-              "label": "_minDeposit",
-              "type": "t_uint256",
+              "label": "_validators",
+              "type": "t_mapping(t_address,t_struct(Validator)2833_storage)",
               "src": "contracts/main/TruStakePOLStorage.sol:28",
               "offset": 0,
               "slot": "6"
             },
             {
               "contract": "TruStakePOLStorage",
-              "label": "_validators",
-              "type": "t_mapping(t_address,t_struct(Validator)2859_storage)",
+              "label": "_validatorAddresses",
+              "type": "t_array(t_address)dyn_storage",
               "src": "contracts/main/TruStakePOLStorage.sol:30",
               "offset": 0,
               "slot": "7"
             },
             {
               "contract": "TruStakePOLStorage",
-              "label": "_validatorAddresses",
-              "type": "t_array(t_address)dyn_storage",
+              "label": "_withdrawals",
+              "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Withdrawal)2824_storage))",
               "src": "contracts/main/TruStakePOLStorage.sol:32",
               "offset": 0,
               "slot": "8"
             },
             {
               "contract": "TruStakePOLStorage",
-              "label": "_withdrawals",
-              "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Withdrawal)2850_storage))",
+              "label": "_delegateRegistry",
+              "type": "t_address",
               "src": "contracts/main/TruStakePOLStorage.sol:34",
               "offset": 0,
               "slot": "9"
-            },
-            {
-              "contract": "TruStakePOLStorage",
-              "label": "_delegateRegistry",
-              "type": "t_address",
-              "src": "contracts/main/TruStakePOLStorage.sol:36",
-              "offset": 0,
-              "slot": "10"
             }
           ]
         }

@@ -23,7 +23,6 @@ import {StakerInfo, ValidatorState, Validator, Withdrawal} from "./Types.sol";
 import {IMasterWhitelist} from "../interfaces/IMasterWhitelist.sol";
 
 uint256 constant FEE_PRECISION = 1e4;
-uint256 constant MAX_EPSILON = 1e12;
 uint256 constant ONE_POL = 1e18;
 uint256 constant WAD = 1e18;
 
@@ -125,7 +124,6 @@ contract TruStakePOL is
         $._treasuryAddress = _treasuryAddress;
         $._delegateRegistry = _delegateRegistry;
         $._fee = _fee;
-        $._epsilon = 1e4;
         $._minDeposit = ONE_POL; // default minimum is 1 POL
 
         emit StakerInitialized(
@@ -157,7 +155,6 @@ contract TruStakePOL is
             defaultValidatorAddress: $._defaultValidatorAddress,
             whitelistAddress: $._whitelistAddress,
             delegateRegistry: $._delegateRegistry,
-            epsilon: $._epsilon,
             fee: $._fee,
             minDeposit: $._minDeposit
         });
@@ -296,17 +293,12 @@ contract TruStakePOL is
 
     /// @inheritdoc ITruStakePOL
     function maxWithdraw(address _user) public view override returns (uint256) {
-        uint256 preview = previewRedeem(balanceOf(_user));
-        if (preview == 0) return 0;
-
-        TruStakePOLStorageStruct storage $ = _getTruStakePOLStorage();
-
-        return preview + $._epsilon;
+        return previewRedeem(balanceOf(_user));
     }
 
     /// @inheritdoc ITruStakePOL
     function previewRedeem(uint256 _shares) public view override returns (uint256) {
-        return _convertToAssets(_shares, Math.Rounding.Ceil);
+        return _convertToAssets(_shares, Math.Rounding.Floor);
     }
 
     /// @inheritdoc ITruStakePOL
@@ -370,16 +362,6 @@ contract TruStakePOL is
         TruStakePOLStorageStruct storage $ = _getTruStakePOLStorage();
         emit SetFee($._fee, _fee);
         $._fee = _fee;
-    }
-
-    /// @notice Sets the epsilon for rounding.
-    /// @param _epsilon Buffer amount for rounding.
-    function setEpsilon(uint256 _epsilon) external onlyOwner {
-        if (_epsilon > MAX_EPSILON) revert EpsilonTooLarge();
-
-        TruStakePOLStorageStruct storage $ = _getTruStakePOLStorage();
-        emit SetEpsilon($._epsilon, _epsilon);
-        $._epsilon = _epsilon;
     }
 
     /// @notice Sets the lower deposit limit.
@@ -640,22 +622,22 @@ contract TruStakePOL is
         TruStakePOLStorageStruct storage $ = _getTruStakePOLStorage();
 
         // If remaining user balance is below 1 POL, entire balance is withdrawn and all shares
-        // are burnt. We allow the user to withdraw their deposited amount + epsilon
+        // are burnt.
         {
             uint256 maxWithdrawal = maxWithdraw(_user);
             if (_amount > maxWithdrawal) revert WithdrawalAmountTooLarge();
+            uint256 validatorStake = $._validators[_validator].stakedAmount;
+            if (_amount > validatorStake) revert WithdrawalAmountAboveValidatorStake();
 
-            if (maxWithdrawal - _amount < ONE_POL) {
+            // if the difference between maxWithdrawal and _amount is less than 1 POL,
+            // and the validator has enough stake, we unstake the full max withdrawal amount
+            if (maxWithdrawal - _amount < ONE_POL && maxWithdrawal <= validatorStake) {
                 _amount = maxWithdrawal;
                 shareDecreaseUser = balanceOf(_user);
             } else {
-                // calculate share decrease
-                shareDecreaseUser = (_amount * globalPriceDenom * WAD) / globalPriceNum;
+                // calculate share decrease rounding up
+                shareDecreaseUser = Math.mulDiv(_amount * WAD, globalPriceDenom, globalPriceNum, Math.Rounding.Ceil);
             }
-
-            // check if the validator has enough staked assets to withdraw
-            uint256 validatorStake = $._validators[_validator].stakedAmount;
-            if (_amount > validatorStake) revert WithdrawalAmountAboveValidatorStake();
         }
 
         uint256 shareIncreaseTsy =
