@@ -15,16 +15,16 @@ const contractName = "TruStakeMATICv2";
 // This script will deploy the contract implementation, proxy and proxy admin.
 async function main() {
 
-  const chainID = network.config.chainId;
-  console.log(`Chain ID: ${chainID}`);
+  const chainId = network.config.chainId;
+  console.log(`Deploying ${contractName} on chain ID ${chainId}.`);
 
-  // specify constructor args
+  // Specify constructor args.
   const args = [
-    STAKING_TOKEN_ADDRESS[chainID],
-    STAKE_MANAGER_CONTRACT_ADDRESS[chainID],
-    VALIDATOR_SHARE_CONTRACT_ADDRESS[chainID],
-    WHITELIST_ADDRESS[chainID],
-    TREASURY_ADDRESS[chainID],
+    STAKING_TOKEN_ADDRESS[chainId],
+    STAKE_MANAGER_CONTRACT_ADDRESS[chainId],
+    VALIDATOR_SHARE_CONTRACT_ADDRESS[chainId],
+    WHITELIST_ADDRESS[chainId],
+    TREASURY_ADDRESS[chainId],
     PHI,
     DIST_PHI,
   ];

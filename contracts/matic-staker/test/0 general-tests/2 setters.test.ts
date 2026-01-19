@@ -45,6 +45,22 @@ describe("SETTERS", () => {
     });
   });
 
+  describe("setDelegateRegistry", async () => {
+    it("Reverts with zero address", async () => {
+        await expect(staker.setDelegateRegistry(ethers.constants.AddressZero)).to.be.revertedWithCustomError(staker,"ZeroAddressNotSupported");
+    });
+    it("Works with a new address", async () => {
+        await staker.setDelegateRegistry(two.address);
+        expect(await staker.delegateRegistry()).to.equal(two.address);
+    });
+    it("Works with the same address", async () => {
+        await staker.setDelegateRegistry(two.address);
+        const addr = await staker.delegateRegistry();
+        await staker.setDelegateRegistry(addr);
+        expect(await staker.delegateRegistry()).to.equal(addr);
+    });
+  });
+
   describe("setPhi", async () => {
     it("General input validation; reverts when too high", async () => {
         const phi = await staker.phi();

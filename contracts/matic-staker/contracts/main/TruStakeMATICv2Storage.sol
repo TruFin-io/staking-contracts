@@ -71,6 +71,9 @@ abstract contract TruStakeMATICv2Storage {
     /// @notice Mapping of users to the private validator they have access to.
     mapping(address => address) public usersPrivateAccess;
 
+    /// @notice Address of the POL delegate registry contract.
+    address public delegateRegistry;
+
     /// @notice Gap for upgradeability.
-    uint256[43] private __gap;
+    uint256[42] private __gap;
 }

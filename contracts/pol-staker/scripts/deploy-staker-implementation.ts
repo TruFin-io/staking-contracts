@@ -1,13 +1,17 @@
 import { ethers, network } from "hardhat";
 
+import { TruStakePOL__factory } from "../typechain-types";
+
 async function main() {
-  // load staker and await deployment
-  const staker = await ethers.deployContract("TruStakePOL");
-  await staker.deployed();
+  const contractFactory = await ethers.getContractFactory<[], TruStakePOL__factory>("TruStakePOL");
+  const staker = await contractFactory.deploy();
+  await staker.waitForDeployment();
+
+  const address = await staker.getAddress();
 
   // log deployed address and verification instructions
-  console.log(`Staker deployed at ${staker.address}`);
-  console.log(`Verify with: npx hardhat verify ${staker.address} --network ${network.name}`);
+  console.log(`Staker deployed at ${address}`);
+  console.log(`Verify with: npx hardhat verify ${address} --network ${network.name}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

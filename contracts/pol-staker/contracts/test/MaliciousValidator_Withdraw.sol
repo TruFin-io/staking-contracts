@@ -33,7 +33,13 @@ contract MaliciousValidator_Withdraw is IValidatorShare {
         return _amount;
     }
 
-    function sellVoucher_newPOL(uint256, /*claimAmount*/ uint256 /*maximumSharesToBurn*/ ) external {
+    function sellVoucher_newPOL(
+        uint256,
+        /*claimAmount*/
+        uint256 /*maximumSharesToBurn*/
+    )
+        external
+    {
         polToken.approve(address(staker), halfDeposit);
         staker.withdrawFromSpecificValidator(halfDeposit, address(this));
     }

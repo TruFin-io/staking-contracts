@@ -6,6 +6,7 @@ import ValidatorShareABI from "../../../../abis/external/ValidatorShare.json";
 import WhitelistABI from "../../../../abis/whitelist/MasterWhitelist.json";
 import MainnetStakerABI from "../../../../abis/mainnet/TruStakeMATICv2.json";
 import StakerABI from "../../../../abis/matic-staker/TruStakeMATICv2.json";
+import DelegateRegistryABI from "../../../../abis/external/DelegateRegistry.json";
 
 // --- Chain Config ---
 
@@ -78,6 +79,8 @@ export const STAKING_TOKEN_ABI = MaticTokenABI;
 export const STAKE_MANAGER_ABI = StakeManagerABI;
 
 export const VALIDATOR_SHARE_ABI = ValidatorShareABI;
+
+export const DELEGATE_REGISTRY_ABI = DelegateRegistryABI;
 
 export const WHITELIST_ABI = WhitelistABI;
 

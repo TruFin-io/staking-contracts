@@ -3,6 +3,7 @@
 pragma solidity =0.8.19;
 
 import {ValidatorState} from "../main/Types.sol";
+import {IDelegateRegistry} from "../interfaces/IDelegateRegistry.sol";
 
 interface ITruStakeMATICv2 {
     // --- Events ---
@@ -137,6 +138,8 @@ interface ITruStakeMATICv2 {
 
     event SetTreasury(address indexed _oldTreasuryAddress, address indexed _newTreasuryAddress);
 
+    event SetDelegateRegistry(address indexed _oldDelegateRegistry, address indexed _newDelegateRegistry);
+
     event SetDefaultValidator(address indexed _oldDefaultValidator, address indexed _newDefaultValidator);
 
     event SetPhi(uint256 indexed _oldPhi, uint256 indexed _newPhi);
@@ -162,6 +165,14 @@ interface ITruStakeMATICv2 {
     event PrivateAccessRemoved(address indexed _user, address indexed _validator);
 
     event ValidatorPrivacyChanged(address indexed _validator, bool _oldIsPrivate, bool _newIsPrivate);
+
+    event GovernanceDelegationSet(
+        string context,
+        IDelegateRegistry.Delegation[] delegation,
+        uint256 expirationTimestamp
+    );
+
+    event GovernanceDelegationCleared(string context);
 
     // --- Errors ---
 
