@@ -21,14 +21,6 @@ export default {
     }
   },
   networks: {
-    goerli: {
-      url: process.env.GOERLI_RPC,
-      chainId: 5,
-      // gas: 180_000_000, // 200_000_000
-      // gasLimit: 180_000_000, // 200_000_000
-      // gasPrice: 8_000_000_000, // 400_000_000_000
-      accounts: [process.env.DEPLOYER_PK]
-    },
     sepolia: {
       url: process.env.SEPOLIA_RPC,
       chainId: 11155111,
@@ -37,18 +29,11 @@ export default {
       // gasPrice: 8_000_000_000, // 400_000_000_000
       accounts: [process.env.DEPLOYER_PK]
     },
-    mumbai: {
-      url: process.env.MUMBAI_RPC,
-      chainId: 80001,
-      // gas: 180_000_000,
-      // gasPrice: 8_000_000_000,
-      accounts: [process.env.DEPLOYER_PK]
-    },
     mainnet: {
       url: process.env.MAINNET_RPC,
       chainId: 1,
       gas: 5_000_000,
-      gasPrice: 40_000_000_000,
+      gasPrice: 10_000_000_000,
       accounts: [process.env.DEPLOYER_PK]
     },
     hardhat: {

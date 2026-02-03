@@ -25,7 +25,7 @@ describe("HAPPY PATH", () => {
     whitelist = await upgrades.deployProxy(whiteListFactory, []);
 
     // add an agent
-    whitelist.connect(owner).addAgent(agent.address);
+    await whitelist.connect(owner).addAgent(agent.address);
   });
 
   it("should return true when checking whether the owner is an agent", async function () {
@@ -73,23 +73,23 @@ describe("HAPPY PATH", () => {
   });
 
   it("should whitelist a blacklisted user", async function () {
-    await whitelist.connect(agent).blacklistUser(user.address);
-    expect(await whitelist.connect(agent).isUserBlacklisted(user.address)).to.equal(true);
+    await whitelist.connect(owner).blacklistUser(user.address);
+    expect(await whitelist.isUserBlacklisted(user.address)).to.equal(true);
 
-    await whitelist.connect(agent).whitelistUser(user.address);
+    await whitelist.connect(owner).whitelistUser(user.address);
 
-    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(true);
-    expect(await whitelist.connect(agent).isUserBlacklisted(user.address)).to.equal(false);
+    expect(await whitelist.isUserWhitelisted(user.address)).to.equal(true);
+    expect(await whitelist.isUserBlacklisted(user.address)).to.equal(false);
   });
 
   it("should blacklist a whitelisted user", async function () {
-    await whitelist.connect(agent).whitelistUser(user.address);
-    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(true);
+    await whitelist.connect(owner).whitelistUser(user.address);
+    expect(await whitelist.isUserWhitelisted(user.address)).to.equal(true);
 
-    await whitelist.connect(agent).blacklistUser(user.address);
+    await whitelist.connect(owner).blacklistUser(user.address);
 
-    expect(await whitelist.connect(agent).isUserWhitelisted(user.address)).to.equal(false);
-    expect(await whitelist.connect(agent).isUserBlacklisted(user.address)).to.equal(true);
+    expect(await whitelist.isUserWhitelisted(user.address)).to.equal(false);
+    expect(await whitelist.isUserBlacklisted(user.address)).to.equal(true);
   });
 
   it("should clear a blacklisted user's whitelisting status", async function () {
@@ -163,7 +163,7 @@ describe("HAPPY PATH", () => {
   });
 
   it("should raise an event when a user is blacklisted", async function () {
-    await expect(await whitelist.connect(agent).blacklistUser(user.address))
+    await expect(await whitelist.connect(owner).blacklistUser(user.address))
       .to.emit(whitelist, "WhitelistingStatusChanged")
       .withArgs(user.address, WhitelistingStatus.None, WhitelistingStatus.Blacklisted);
   });

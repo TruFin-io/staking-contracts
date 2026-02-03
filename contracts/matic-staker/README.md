@@ -61,10 +61,10 @@ To upgrade for mainnet, deploy the implementation and update the proxy separatel
 Run the following commands:
 
 1. Deploy the implementation:  
-`npx hardhat run scripts/deploy/deploy-implementation.ts --network mainnet`
+`npx hardhat run scripts/deploy-staker-implementation.ts --network mainnet`
 1. Verify the deployment:  
 `npx hardhat verify <new implementation address> --network mainnet`
 1. Manually upgrade the proxy admin to point the proxy to the new implementation. This is done via the Safe app.
 2. Import the implementation:  
-   `IMPLEMENTATION=<new implementation address> npx hardhat run scripts/import-implementation.ts --network mainnet`
+   `IMPLEMENTATION=<new implementation address> npx hardhat run scripts/import-staker-implementation.ts --network mainnet`
  

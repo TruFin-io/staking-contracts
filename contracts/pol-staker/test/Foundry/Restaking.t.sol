@@ -49,10 +49,11 @@ contract RestakeState is BaseState {
 
         staker.compoundRewards(secondValidatorAddress);
 
-        uint256 midCompoundSharePriceNum = (
-            (depositAmount * 2 + amountRestaked + secondValidatorRewards) * FEE_PRECISION
-                + (FEE_PRECISION - uint256(fee)) * assetsInStaker
-        ) * 1e18;
+        uint256 midCompoundSharePriceNum =
+            ((depositAmount * 2 + amountRestaked + secondValidatorRewards)
+                    * FEE_PRECISION
+                    + (FEE_PRECISION - uint256(fee))
+                    * assetsInStaker) * 1e18;
         uint256 midCompoundSharePriceDenom = (preBalance + sharesMintedForRestake) * FEE_PRECISION;
         uint256 sharesMintedForDeposit = assetsInStaker * uint256(fee) * 1e18 * midCompoundSharePriceDenom
             / (midCompoundSharePriceNum * FEE_PRECISION);

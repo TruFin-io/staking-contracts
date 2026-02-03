@@ -9,11 +9,13 @@ import {
   VALIDATOR_SHARE_CONTRACT_ADDRESS,
   WHITELIST_ADDRESS,
 } from "../constants/constants";
+import { TruStakePOL, TruStakePOL__factory } from "../typechain-types";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const clc = require("cli-color");
 
 const contractName = "TruStakePOL";
+type InitializeArgs = Parameters<TruStakePOL["initialize"]>;
 
 // This script will deploy the contract implementation, proxy and proxy admin.
 async function main() {
@@ -21,7 +23,7 @@ async function main() {
   console.log(`Deploying ${contractName} on chain ID ${chainId}.`);
 
   // Specify constructor args.
-  const args = [
+  const args: InitializeArgs = [
     STAKING_TOKEN_ADDRESS[chainId],
     STAKE_MANAGER_CONTRACT_ADDRESS[chainId],
     VALIDATOR_SHARE_CONTRACT_ADDRESS[chainId],
@@ -33,7 +35,7 @@ async function main() {
   console.log(args);
 
   // Load the contract proxy and await deployment.
-  const contractFactory = await ethers.getContractFactory(contractName);
+  const contractFactory = await ethers.getContractFactory<[], TruStakePOL__factory>(contractName);
   const contract = await upgrades.deployProxy(contractFactory, args);
   await contract.waitForDeployment();
 

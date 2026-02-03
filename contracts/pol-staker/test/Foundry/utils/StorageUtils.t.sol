@@ -53,9 +53,8 @@ abstract contract ERC20StorageUtils is BaseStorageUtils {
     }
 
     function writeAllowance(address owner, address spender, uint256 amount) public {
-        stdstore.target(storageTarget).sig(IERC20.allowance.selector).with_key(owner).with_key(spender).checked_write(
-            amount
-        );
+        stdstore.target(storageTarget).sig(IERC20.allowance.selector).with_key(owner).with_key(spender)
+            .checked_write(amount);
     }
 
     function increaseUserBalance(address user, uint256 amount) public {
@@ -239,9 +238,7 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
         vm.store({target: target, slot: base, value: bytes32(uint256(v.state))});
         vm.store({target: target, slot: bytes32(uint256(base) + 1), value: bytes32(v.stakedAmount)});
         vm.store({
-            target: target,
-            slot: bytes32(uint256(base) + 2),
-            value: bytes32(uint256(uint160(v.validatorAddress)))
+            target: target, slot: bytes32(uint256(base) + 2), value: bytes32(uint256(uint160(v.validatorAddress)))
         });
     }
 
@@ -472,5 +469,6 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
 }
 
 abstract contract StorageUtils is TruStakePOLStorageUtils, ERC20StorageUtils {
-// solhint-disable-previous-line no-empty-blocks
-}
+    // solhint-disable-previous-line no-empty-blocks
+
+    }

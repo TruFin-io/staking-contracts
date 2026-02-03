@@ -18,8 +18,9 @@ contract DelegateRegistryState is BaseState {
         IDelegateRegistry.Delegation[] memory delegates,
         uint256 expirationTimestamp
     ) public {
-        bytes memory callData =
-            abi.encodeCall(IDelegateRegistry.setDelegation, (context, delegates, expirationTimestamp));
+        bytes memory callData = abi.encodeCall(
+            IDelegateRegistry.setDelegation, (context, delegates, expirationTimestamp)
+        );
         vm.mockCall(delegateRegistryAddress, callData, "");
     }
 

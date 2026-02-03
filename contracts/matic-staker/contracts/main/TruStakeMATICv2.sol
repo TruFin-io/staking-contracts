@@ -13,6 +13,7 @@ import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/security/
 // Polygon
 import {IValidatorShare} from "../interfaces/IValidatorShare.sol";
 import {IStakeManager} from "../interfaces/IStakeManager.sol";
+import {IDelegateRegistry} from "../interfaces/IDelegateRegistry.sol";
 
 // TruFin
 import {ERC4626Storage} from "./ERC4626Storage.sol";
@@ -275,6 +276,26 @@ contract TruStakeMATICv2 is
         validator.isPrivate = _isPrivate;
 
         emit ValidatorPrivacyChanged(_validator, oldIsPrivate, _isPrivate);
+    }
+
+    function setDelegateRegistry(address _delegateRegistry) external onlyOwner {
+        _checkNotZeroAddress(_delegateRegistry);
+        emit SetDelegateRegistry(delegateRegistry, _delegateRegistry);
+        delegateRegistry = _delegateRegistry;
+    }
+
+    function setGovernanceDelegation(
+        string calldata context,
+        IDelegateRegistry.Delegation[] calldata delegates,
+        uint256 expirationTimestamp
+    ) external onlyOwner {
+        if (delegates.length == 0) {
+            IDelegateRegistry(delegateRegistry).clearDelegation(context);
+            emit GovernanceDelegationCleared(context);
+            return;
+        }
+        IDelegateRegistry(delegateRegistry).setDelegation(context, delegates, expirationTimestamp);
+        emit GovernanceDelegationSet(context, delegates, expirationTimestamp);
     }
 
     /// @notice Claims a previously requested and now unbonded withdrawal.
