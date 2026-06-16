@@ -470,5 +470,4 @@ abstract contract TruStakePOLStorageUtils is BaseStorageUtils {
 
 abstract contract StorageUtils is TruStakePOLStorageUtils, ERC20StorageUtils {
     // solhint-disable-previous-line no-empty-blocks
-
-    }
+}
