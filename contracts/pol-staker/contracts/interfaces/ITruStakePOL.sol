@@ -333,6 +333,10 @@ interface ITruStakePOL {
         );
 
     /// @notice Gets the maximum amount of POL a user can withdraw from the vault.
+    /// @dev Reflects the full share value including unclaimed rewards. A single withdrawal can only
+    /// unbond up to the amount currently staked on the validator; the remainder becomes withdrawable
+    /// once rewards are restaked via `compoundRewards` (which anyone may call). Attempting to withdraw
+    /// the full amount before that reverts with `WithdrawalAmountAboveValidatorStake` by design.
     /// @param _user The user under consideration.
     /// @return The amount of POL.
     function maxWithdraw(address _user) external view returns (uint256);
