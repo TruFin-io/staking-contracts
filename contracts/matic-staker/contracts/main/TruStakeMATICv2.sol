@@ -352,6 +352,10 @@ contract TruStakeMATICv2 is
     /// @notice Allocates the validation rewards earned by an amount of the caller's staked MATIC to a user.
     /// @param _amount The amount of staked MATIC to allocate.
     /// @param _recipient The address of the target recipient.
+    /// @dev Allocations are an accounting tool, not an on-chain obligation: they do not lock funds or
+    /// entitle the recipient to a payout. Over-allocation is intentional — the bound here is a
+    /// zero-balance / maxWithdraw sanity check and deliberately does not subtract existing allocations,
+    /// and distributors are not required to keep enough funds to cover all allocations at once.
     function allocate(uint256 _amount, address _recipient) external onlyWhitelist nonReentrant whenNotPaused {
         _checkNotZeroAddress(_recipient);
 
@@ -419,6 +423,9 @@ contract TruStakeMATICv2 is
     /// @notice Deallocates an amount of MATIC previously allocated to a user.
     /// @param _amount The amount the caller wishes to reduce the target's allocation by.
     /// @param _recipient The address of the user whose allocation is being reduced.
+    /// @dev Deallocating without first distributing intentionally discards the recipient's
+    /// previously-accrued allocation rewards. This is by design: allocations are not an obligation, so
+    /// recipients are never entitled to a payout.
     function deallocate(uint256 _amount, address _recipient) external onlyWhitelist nonReentrant whenNotPaused {
         Allocation storage individualAllocation = allocations[msg.sender][_recipient][false];
 
@@ -575,6 +582,8 @@ contract TruStakeMATICv2 is
     /// @param _inMatic A value indicating whether the reward is in MATIC or not.
     /// @dev If _inMatic is set to true, the MATIC will be transferred straight from the distributor's wallet.
     /// Their TruMATIC balance will not be altered.
+    /// @dev Rounding truncates in favour of the allocator by design; since allocations are not binding,
+    /// this causes no entitlement loss and can be avoided by waiting longer before distributing.
     function distributeRewards(address _recipient, bool _inMatic) public onlyWhitelist nonReentrant whenNotPaused {
         (uint256 globalPriceNum, uint256 globalPriceDenom) = sharePrice();
         _distributeRewards(_recipient, msg.sender, _inMatic, globalPriceNum, globalPriceDenom);
